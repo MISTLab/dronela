@@ -17,6 +17,7 @@
 #include "carla/client/TrafficLight.h"
 #include "carla/client/TrafficSign.h"
 #include "carla/client/Vehicle.h"
+#include "carla/client/Drone.h"
 #include "carla/client/Walker.h"
 #include "carla/client/WalkerAIController.h"
 #include "carla/client/World.h"
@@ -85,6 +86,8 @@ namespace detail {
       return MakeActorImpl<ServerSideSensor>(std::move(init), gc);
     } else if (StringUtil::StartsWith(description.description.id, "vehicle.")) {
       return MakeActorImpl<Vehicle>(std::move(init), gc);
+    }else if (StringUtil::StartsWith(description.description.id, "drone.")) {
+      return MakeActorImpl<Drone>(std::move(init), gc);
     } else if (StringUtil::StartsWith(description.description.id, "walker.")) {
       return MakeActorImpl<Walker>(std::move(init), gc);
     } else if (StringUtil::StartsWith(description.description.id, "traffic.traffic_light")) {

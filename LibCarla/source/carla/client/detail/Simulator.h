@@ -13,6 +13,7 @@
 #include "carla/client/GarbageCollectionPolicy.h"
 #include "carla/client/TrafficLight.h"
 #include "carla/client/Vehicle.h"
+#include "carla/client/Drone.h"
 #include "carla/client/Walker.h"
 #include "carla/client/WorldSnapshot.h"
 #include "carla/client/detail/ActorFactory.h"
@@ -411,6 +412,10 @@ namespace detail {
       _client.AddActorAngularImpulse(actor.GetId(), vector);
     }
 
+   void AddActorPrinter(const Actor &actor, const geom::Vector3D &vector) {
+      _client.AddActorPrinter(actor.GetId(), vector);
+    } 
+
     void AddActorTorque(const Actor &actor, const geom::Vector3D &torque) {
       _client.AddActorAngularImpulse(actor.GetId(), torque);
     }
@@ -455,6 +460,10 @@ namespace detail {
 
     void ApplyControlToVehicle(Vehicle &vehicle, const rpc::VehicleControl &control) {
       _client.ApplyControlToVehicle(vehicle.GetId(), control);
+    }
+
+    void ApplyControlToDrone(Drone &drone) {
+      _client.ApplyControlToDrone(drone.GetId());
     }
 
     void ApplyAckermannControlToVehicle(Vehicle &vehicle, const rpc::VehicleAckermannControl &control) {

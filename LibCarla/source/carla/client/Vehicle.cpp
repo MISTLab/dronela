@@ -48,6 +48,7 @@ namespace client {
     GetEpisode().Lock()->ShowVehicleDebugTelemetry(*this, enabled);
   }
 
+
   void Vehicle::ApplyControl(const Control &control) {
     if (!_is_control_sticky || (control != _control)) {
       GetEpisode().Lock()->ApplyControlToVehicle(*this, control);

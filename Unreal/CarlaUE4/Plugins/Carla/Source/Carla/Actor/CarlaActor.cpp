@@ -9,6 +9,7 @@
 #include "Carla/OpenDrive/OpenDrive.h"
 #include "Carla/Util/NavigationMesh.h"
 #include "Carla/Vehicle/CarlaWheeledVehicle.h"
+#include "Carla/Vehicle/CarlaDrone.h"
 #include "Carla/Walker/WalkerController.h"
 #include "Carla/Walker/WalkerBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -61,6 +62,19 @@ FVehicleActor::FVehicleActor(
   Type = ActorType::Vehicle;
   ActorData = MakeShared<FVehicleData>();
 }
+
+FDroneActor::FDroneActor(
+    IdType ActorId,
+    AActor* Actor,
+    TSharedPtr<const FActorInfo> Info,
+    carla::rpc::ActorState InState,
+    UWorld* World)
+    : FCarlaActor(ActorId, Actor, Info, InState, World)
+{
+  Type = ActorType::Drone;
+  ActorData = MakeShared<FDroneData>();
+}
+
 FSensorActor::FSensorActor(
     IdType ActorId,
     AActor* Actor,
@@ -135,6 +149,9 @@ TSharedPtr<FCarlaActor> FCarlaActor::ConstructCarlaActor(
     break;
   case ActorType::Vehicle:
     return MakeShared<FVehicleActor>(ActorId, Actor, std::move(Info), InState, World);
+    break;
+  case ActorType::Drone:
+    return MakeShared<FDroneActor>(ActorId, Actor, std::move(Info), InState, World);
     break;
   case ActorType::Walker:
     return MakeShared<FWalkerActor>(ActorId, Actor, std::move(Info), InState, World);
@@ -523,7 +540,8 @@ ECarlaServerResponse FCarlaActor::AddActorAngularImpulse(const FVector& AngularI
   }
   else
   {
-    auto RootComponent = Cast<UPrimitiveComponent>(GetActor()->GetRootComponent());
+  
+     auto RootComponent = Cast<UPrimitiveComponent>(GetActor()->GetRootComponent());
     if (RootComponent == nullptr)
     {
       return ECarlaServerResponse::FunctionNotSupported;
@@ -535,6 +553,24 @@ ECarlaServerResponse FCarlaActor::AddActorAngularImpulse(const FVector& AngularI
   }
   return ECarlaServerResponse::Success;
 }
+
+ECarlaServerResponse FCarlaActor::AddActorPrinter(const FVector& AngularInpulse)
+{
+  if (IsDormant())
+  {
+  }
+  else
+  {
+    auto RootComponent = Cast<UPrimitiveComponent>(GetActor()->GetRootComponent());
+    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("inPrinter"));
+    // Bone exists, you can proceed with applying forces to it
+    FVector ForceToApply = FVector(0.0f, 0.0f, 2000.0f);
+    RootComponent->AddForce(ForceToApply, "None", true);
+   
+    }
+  
+  return ECarlaServerResponse::Success;
+} 
 
 ECarlaServerResponse FCarlaActor::AddActorTorque(const FVector& Torque)
 {
@@ -834,6 +870,26 @@ ECarlaServerResponse FVehicleActor::ApplyControlToVehicle(
   return ECarlaServerResponse::Success;
 }
 
+ECarlaServerResponse FDroneActor::ApplyControlToDrone()
+{
+  if (IsDormant())
+  {
+    
+  }
+  else
+  {
+    auto Drone = Cast<ADrone>(GetActor());
+    if (Drone == nullptr)
+    {
+      return ECarlaServerResponse::NotADrone;
+    }
+    Drone->ApplyDroneControl();
+    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Drone->ApplyDroneControl();"));
+
+  }
+  return ECarlaServerResponse::Success;
+}
+
 ECarlaServerResponse FVehicleActor::ApplyAckermannControlToVehicle(
       const FVehicleAckermannControl& AckermannControl, const EVehicleInputPriority& Priority)
 {
@@ -955,6 +1011,8 @@ ECarlaServerResponse FVehicleActor::SetActorAutopilot(bool bEnabled, bool bKeepS
   }
   return ECarlaServerResponse::Success;
 }
+
+
 
 ECarlaServerResponse FVehicleActor::ShowVehicleDebugTelemetry(bool bEnabled)
 {

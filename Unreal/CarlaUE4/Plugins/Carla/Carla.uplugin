@@ -19,9 +19,22 @@
 			"Type": "Runtime",
 			"LoadingPhase": "PreDefault",
 			"AdditionalDependencies": [
-				"Engine"
+				"Engine",
+				"MavCom"
 			]
-		}
+		},
+
+        {
+            "Name": "MavCom",
+            "Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"CoreUObject"
+			]
+        }
+		
+
 	],
 	"Plugins": [
 		{

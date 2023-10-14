@@ -100,6 +100,11 @@ void export_commands() {
     .def_readwrite("actor_id", &cr::Command::ApplyVehicleControl::actor)
     .def_readwrite("control", &cr::Command::ApplyVehicleControl::control)
   ;
+  class_<cr::Command::ApplyDroneControl>("ApplyDroneControl")
+    .def("__init__", &command_impl::CustomInit<ActorPtr>, (arg("actor")))
+    .def(init<cr::ActorId>((arg("actor_id"))))
+    .def_readwrite("actor_id", &cr::Command::ApplyDroneControl::actor)
+  ;
 
   class_<cr::Command::ApplyVehicleAckermannControl>("ApplyVehicleAckermannControl")
     .def("__init__", &command_impl::CustomInit<ActorPtr, cr::VehicleAckermannControl>, (arg("actor"), arg("control")))
@@ -172,6 +177,13 @@ void export_commands() {
     .def_readwrite("impulse", &cr::Command::ApplyAngularImpulse::impulse)
   ;
 
+  class_<cr::Command::ApplyPrinter>("ApplyPrinter")
+    .def("__init__", &command_impl::CustomInit<ActorPtr, cg::Vector3D>, (arg("actor"), arg("impulse")))
+    .def(init<cr::ActorId, cg::Vector3D>((arg("actor_id"), arg("impulse"))))
+    .def_readwrite("actor_id", &cr::Command::ApplyPrinter::actor)
+    .def_readwrite("impulse", &cr::Command::ApplyPrinter::impulse)
+  ;
+
   class_<cr::Command::ApplyTorque>("ApplyTorque")
     .def("__init__", &command_impl::CustomInit<ActorPtr, cg::Vector3D>, (arg("actor"), arg("torque")))
     .def(init<cr::ActorId, cg::Vector3D>((arg("actor_id"), arg("torque"))))
@@ -218,6 +230,7 @@ void export_commands() {
   implicitly_convertible<cr::Command::SpawnActor, cr::Command>();
   implicitly_convertible<cr::Command::DestroyActor, cr::Command>();
   implicitly_convertible<cr::Command::ApplyVehicleControl, cr::Command>();
+  implicitly_convertible<cr::Command::ApplyDroneControl, cr::Command>();
   implicitly_convertible<cr::Command::ApplyVehicleAckermannControl, cr::Command>();
   implicitly_convertible<cr::Command::ApplyWalkerControl, cr::Command>();
   implicitly_convertible<cr::Command::ApplyVehiclePhysicsControl, cr::Command>();
@@ -228,6 +241,7 @@ void export_commands() {
   implicitly_convertible<cr::Command::ApplyImpulse, cr::Command>();
   implicitly_convertible<cr::Command::ApplyForce, cr::Command>();
   implicitly_convertible<cr::Command::ApplyAngularImpulse, cr::Command>();
+  implicitly_convertible<cr::Command::ApplyPrinter, cr::Command>();
   implicitly_convertible<cr::Command::ApplyTorque, cr::Command>();
   implicitly_convertible<cr::Command::SetSimulatePhysics, cr::Command>();
   implicitly_convertible<cr::Command::SetEnableGravity, cr::Command>();

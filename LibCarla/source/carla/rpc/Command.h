@@ -84,6 +84,15 @@ namespace rpc {
       MSGPACK_DEFINE_ARRAY(actor, control);
     };
 
+    struct ApplyDroneControl : CommandBase<ApplyDroneControl> {
+      ApplyDroneControl() = default;
+      ApplyDroneControl(ActorId id)
+        : actor(id) {}
+      ActorId actor;
+      MSGPACK_DEFINE_ARRAY(actor);
+    };
+
+
     struct ApplyVehicleAckermannControl : CommandBase<ApplyVehicleAckermannControl> {
       ApplyVehicleAckermannControl() = default;
       ApplyVehicleAckermannControl(ActorId id, const VehicleAckermannControl &value)
@@ -192,6 +201,16 @@ namespace rpc {
       geom::Vector3D impulse;
       MSGPACK_DEFINE_ARRAY(actor, impulse);
     };
+    
+    struct ApplyPrinter : CommandBase<ApplyPrinter> {
+      ApplyPrinter() = default;
+      ApplyPrinter(ActorId id, const geom::Vector3D &value)
+        : actor(id),
+          impulse(value) {}
+      ActorId actor;
+      geom::Vector3D impulse;
+      MSGPACK_DEFINE_ARRAY(actor, impulse);
+    }; 
 
     struct ApplyTorque : CommandBase<ApplyTorque> {
       ApplyTorque() = default;
@@ -285,6 +304,7 @@ namespace rpc {
         SpawnActor,
         DestroyActor,
         ApplyVehicleControl,
+        ApplyDroneControl,
         ApplyVehicleAckermannControl,
         ApplyWalkerControl,
         ApplyVehiclePhysicsControl,
@@ -294,6 +314,7 @@ namespace rpc {
         ApplyTargetAngularVelocity,
         ApplyImpulse,
         ApplyForce,
+        ApplyPrinter,
         ApplyAngularImpulse,
         ApplyTorque,
         SetSimulatePhysics,

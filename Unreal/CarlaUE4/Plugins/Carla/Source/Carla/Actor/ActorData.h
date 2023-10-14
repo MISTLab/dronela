@@ -76,6 +76,17 @@ public:
   virtual void RestoreActorData(FCarlaActor* CarlaActor, UCarlaEpisode* CarlaEpisode) override;
 };
 
+
+class FDroneData : public FActorData
+{
+public:
+
+
+  virtual void RecordActorData(FCarlaActor* CarlaActor, UCarlaEpisode* CarlaEpisode) override;
+
+  virtual void RestoreActorData(FCarlaActor* CarlaActor, UCarlaEpisode* CarlaEpisode) override;
+};
+
 class FWalkerData : public FActorData
 {
 public:

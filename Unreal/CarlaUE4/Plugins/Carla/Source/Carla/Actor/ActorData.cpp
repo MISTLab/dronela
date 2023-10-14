@@ -86,6 +86,19 @@ FTransform FActorData::GetLocalTransform(UCarlaEpisode* CarlaEpisode) const
   return FTransform(Rotation, LocalLocation, Scale);
 }
 
+
+
+void FDroneData::RecordActorData(FCarlaActor* CarlaActor, UCarlaEpisode* CarlaEpisode)
+{
+  FActorData::RecordActorData(CarlaActor, CarlaEpisode);
+}
+
+void FDroneData::RestoreActorData(FCarlaActor* CarlaActor, UCarlaEpisode* CarlaEpisode)
+{
+  FActorData::RestoreActorData(CarlaActor, CarlaEpisode);
+}
+
+
 void FVehicleData::RecordActorData(FCarlaActor* CarlaActor, UCarlaEpisode* CarlaEpisode)
 {
   FActorData::RecordActorData(CarlaActor, CarlaEpisode);

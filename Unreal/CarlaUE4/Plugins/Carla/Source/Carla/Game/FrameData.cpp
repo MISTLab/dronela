@@ -46,6 +46,13 @@ void FFrameData::GetFrameData(UCarlaEpisode *ThisEpisode, bool bAdditionalData, 
         }
         break;
 
+      case FCarlaActor::ActorType::Drone:
+        AddActorPosition(View);
+        if (bAdditionalData)
+        {
+          AddActorKinematics(View);
+        }
+        break;
       // save the transform of all walkers
       case FCarlaActor::ActorType::Walker:
         AddActorPosition(View);

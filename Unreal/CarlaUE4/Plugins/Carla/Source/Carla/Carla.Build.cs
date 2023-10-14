@@ -17,7 +17,6 @@ public class Carla : ModuleRules
   public Carla(ReadOnlyTargetRules Target) : base(Target)
   {
     PrivatePCHHeaderFile = "Carla.h";
-
     if (IsWindows(Target))
     {
       bEnableExceptions = true;
@@ -72,7 +71,8 @@ public class Carla : ModuleRules
         "RenderCore",
         "RHI",
         "Renderer",
-        "ProceduralMeshComponent"
+        "ProceduralMeshComponent",
+        "MavCom"
         // ... add other public dependencies that you statically link with here ...
       }
       );
@@ -120,8 +120,10 @@ public class Carla : ModuleRules
         // ... add any modules that your module loads dynamically here ...
       }
       );
-
+   
     AddCarlaServerDependency(Target);
+   
+    
   }
 
   private bool UseDebugLibs(ReadOnlyTargetRules Target)

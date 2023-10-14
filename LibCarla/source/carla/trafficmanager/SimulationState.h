@@ -10,6 +10,7 @@ namespace traffic_manager {
 
 enum ActorType {
   Vehicle,
+  Drone,
   Pedestrian,
   Any
 };

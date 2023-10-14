@@ -22,6 +22,18 @@ docs:
 	@doxygen
 	@echo "Documentation index at ./Doxygen/html/index.html"
 
+build-mavsdk:
+	@git clone --recursive -b main https://github.com/KoreshGit/MavSdk_LegacyABI
+	@cd MavSdk_LegacyABI && \
+	cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=install -Bbuild/default -H. && \
+	cmake --build build/default --target install
+
+lib-mavsdk:
+	export LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:$(CURDIR)/../../../MavSdk_LegacyABI/install/lib &&
+
+
+	
+
 clean.LibCarla:
 	@${CARLA_BUILD_TOOLS_FOLDER}/BuildLibCarla.sh --clean
 clean.PythonAPI:

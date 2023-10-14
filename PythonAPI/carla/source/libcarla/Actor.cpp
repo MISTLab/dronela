@@ -7,6 +7,7 @@
 #include <carla/client/Actor.h>
 #include <carla/client/TrafficLight.h>
 #include <carla/client/Vehicle.h>
+#include <carla/client/Drone.h>
 #include <carla/client/Walker.h>
 #include <carla/client/WalkerAIController.h>
 #include <carla/rpc/TrafficLightState.h>
@@ -122,6 +123,7 @@ void export_actor() {
       .def("add_impulse", &AddActorImpulse, (arg("impulse")))
       .def("add_force", &AddActorForce, (arg("force")))
       .def("add_angular_impulse", &cc::Actor::AddAngularImpulse, (arg("angular_impulse")))
+      .def("add_printer"  ,&cc::Actor::AddPrinter, (arg("printer")))
       .def("add_torque", &cc::Actor::AddTorque, (arg("torque")))
       .def("set_simulate_physics", &cc::Actor::SetSimulatePhysics, (arg("enabled") = true))
       .def("set_enable_gravity", &cc::Actor::SetEnableGravity, (arg("enabled") = true))
@@ -194,6 +196,12 @@ void export_actor() {
       .def("use_carsim_road", &cc::Vehicle::UseCarSimRoad, (arg("enabled")))
       .def("enable_chrono_physics", &cc::Vehicle::EnableChronoPhysics, (arg("max_substeps")=30, arg("max_substep_delta_time")=0.002, arg("vehicle_json")="", arg("powetrain_json")="", arg("tire_json")="", arg("base_json_path")=""))
       .def("get_failure_state", &cc::Vehicle::GetFailureState)
+      .def(self_ns::str(self_ns::self))
+  ;
+
+  class_<cc::Drone, bases<cc::Actor>, boost::noncopyable, boost::shared_ptr<cc::Drone>>("Drone",
+      no_init)
+      .def("apply_control_d",&cc::Drone::ApplyControl, (arg("force")))
       .def(self_ns::str(self_ns::self))
   ;
 

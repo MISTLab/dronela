@@ -227,6 +227,10 @@ namespace detail {
     void AddActorAngularImpulse(
         rpc::ActorId actor,
         const geom::Vector3D &vector);
+    
+    void AddActorPrinter(
+        rpc::ActorId actor,
+        const geom::Vector3D &vector);
 
     void AddActorTorque(
         rpc::ActorId actor,
@@ -240,6 +244,7 @@ namespace detail {
         rpc::ActorId actor,
         bool enabled);
 
+
     void SetActorAutopilot(
         rpc::ActorId vehicle,
         bool enabled);
@@ -251,6 +256,10 @@ namespace detail {
     void ApplyControlToVehicle(
         rpc::ActorId vehicle,
         const rpc::VehicleControl &control);
+
+    void ApplyControlToDrone(
+        rpc::ActorId drone
+        );
 
     void ApplyAckermannControlToVehicle(
         rpc::ActorId vehicle,
