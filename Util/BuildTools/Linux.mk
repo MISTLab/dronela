@@ -23,7 +23,7 @@ docs:
 	@echo "Documentation index at ./Doxygen/html/index.html"
 
 build-mavsdk:
-	@git clone --recursive -b main https://github.com/KoreshGit/MavSdk_LegacyABI
+	
 	@cd MavSdk_LegacyABI && \
 	cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=install -Bbuild/default -H. && \
 	cmake --build build/default --target install

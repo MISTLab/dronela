@@ -2,8 +2,9 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-
+#include <optional>
 #include "mavsdk.h"
+
 
 #include "MavApiComponent.generated.h"
 
