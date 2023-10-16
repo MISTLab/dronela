@@ -6,8 +6,6 @@
 #include <thread>
 
 #include "mavsdk.h"
-
-
 #include "Engine/Engine.h"
 
 
