@@ -1,4 +1,0 @@
-[submodule "MavSdk_LegacyABI"]
-	path = MavSdk_LegacyABI
-	url = git@github.com:KoreshGit/MavSdk_LegacyABI.git
-	branch = dronela

@@ -8,9 +8,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "CarlaDroneMotor.h"
-#include "MavApiComponent.h"
 
-//#include "MavApiComponent.h"
 
 #include "CarlaDrone.generated.h"
 UCLASS()
@@ -50,13 +48,6 @@ public:
     UPROPERTY()
     UDroneMotor* Motor_Rear_Right;
 
-    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "MavSDK")
-    UMavApiComponent* MavComponent;
-
-
-    //UPROPERTY()
-    //UMavApiComponent* MavApiComponent;
-    
 private:
   
     

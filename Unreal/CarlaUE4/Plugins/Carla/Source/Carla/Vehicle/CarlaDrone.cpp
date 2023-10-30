@@ -9,9 +9,7 @@
 ADrone::ADrone()
 { 
 
-  MavComponent = CreateDefaultSubobject<UMavApiComponent>(TEXT("MavComponent"));
- 
-  
+
   auto RootComponent = Cast<UPrimitiveComponent>(this->GetRootComponent());
   
   this->SetActorEnableCollision(true);
@@ -87,7 +85,7 @@ void ADrone::Stringer()
 void ADrone::ApplyDroneControl()
 {
 
-  MavComponent->ConnectToPX4();
+
   /* auto RootComponent = Cast<UPrimitiveComponent>(this->GetRootComponent());
   FVector ForceToApply = FVector(0.0f, 0.0f, 2800.0f);
   FVector LocalLocation = FVector(0.5f, 0.5f, 0.0f);
