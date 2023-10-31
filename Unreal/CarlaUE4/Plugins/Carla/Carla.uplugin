@@ -19,7 +19,7 @@
 			"Type": "Runtime",
 			"LoadingPhase": "PreDefault",
 			"AdditionalDependencies": [
-				"Engine",
+				"Engine"
 			]
 		},
 

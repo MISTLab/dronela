@@ -16,6 +16,8 @@ public class Carla : ModuleRules
 
   public Carla(ReadOnlyTargetRules Target) : base(Target)
   {
+
+    PublicIncludePaths.Add("/home/kore/Cmav_Test/mavlink/install/include");
     PrivatePCHHeaderFile = "Carla.h";
     if (IsWindows(Target))
     {

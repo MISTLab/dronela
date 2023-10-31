@@ -84,6 +84,7 @@ void ADrone::Stringer()
 
 void ADrone::ApplyDroneControl()
 {
+  MavConnection->connect();
 
 
   /* auto RootComponent = Cast<UPrimitiveComponent>(this->GetRootComponent());

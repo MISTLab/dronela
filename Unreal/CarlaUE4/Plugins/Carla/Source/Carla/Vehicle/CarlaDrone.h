@@ -8,7 +8,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "CarlaDroneMotor.h"
-
+#include "MavWrapper.h"
 
 #include "CarlaDrone.generated.h"
 UCLASS()
@@ -47,6 +47,9 @@ public:
 
     UPROPERTY()
     UDroneMotor* Motor_Rear_Right;
+
+    UPROPERTY()
+    UMavlinkConnection* MavConnection;
 
 private:
   
