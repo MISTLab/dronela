@@ -1,7 +1,7 @@
 .vscode
 Content
 Intermediate
-Plugins/Carla/CarlaDependencies
+Plugins/Carla/CarlaDependencies/*
 !Plugins/Carla/CarlaDependencies/include/mavlink
 Plugins/Carla/Content
 Plugins/Carla/Intermediate
