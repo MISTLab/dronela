@@ -2,9 +2,10 @@
 Content
 Intermediate
 Plugins/Carla/CarlaDependencies/*
-!Plugins/Carla/CarlaDependencies/include/mavlink
+!Plugins/Carla/Source/Carla
 Plugins/Carla/Content
 Plugins/Carla/Intermediate
 Plugins/CarlaExporter/Intermediate
 Plugins/CarlaTools/Content
 Plugins/CarlaTools/Intermediate
+!/Content/Dronela

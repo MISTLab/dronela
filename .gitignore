@@ -7,7 +7,7 @@ Util/Build
 Install
 Plugins
 
-!Unreal/CarlaUE4/Plugins/include/mavlink
+!Unreal/CarlaUE4/Plugins/Carla/Source/Carla/*
 
 /ExportedMaps
 /Import/*

@@ -11,6 +11,7 @@ namespace client {
   public:
     explicit Drone(ActorInitializer init);
     void ApplyControl();
+    void ApplyMotorSpeed(float m1,float m2,float m3,float m4);
   };
 
 }

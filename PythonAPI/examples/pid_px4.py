@@ -45,6 +45,45 @@ import time
 gps_data_px4 = None
 imu_data_px4 = None
 
+
+
+from simple_pid import PID
+
+def pid_controller(desired, current, kp, ki, kd, output_limits):
+    pid = PID(kp, ki, kd, setpoint=desired, output_limits=output_limits)
+    return pid(current)
+
+
+roll_desired = 0.0
+roll_current = 0.0
+roll_pid = PID(1.0, 0.01, 0.4, setpoint=roll_desired, output_limits=(-1, 1))
+
+
+pitch_desired = 0.0
+pitch_current = 0.0
+pitch_pid = PID(1.0 ,0.01, 0.4, setpoint=pitch_desired, output_limits=(-1, 1))
+
+
+z_desired = 5.0  # Desired altitude (adjust as needed)
+z_current = 0.0   # Current altitude (initially at ground level)
+z_pid = PID(1, 0.01, 0.4, setpoint=z_desired, output_limits=(0, 1))
+
+# Example PID Controller for Yaw
+yaw_desired = 1
+yaw_current = 0
+yaw_pid = PID(1.0, 0.01, 0.4, setpoint=yaw_desired, output_limits=(-1, 1))
+ 
+
+x_desired = 50.0  # Desired altitude (adjust as needed)
+x_current = 0.0   # Current altitude (initially at ground level)
+x_pid = PID(.3, 0, 1, setpoint=x_desired, output_limits=(-1, 1))
+
+y_desired = 12.0  # Desired altitude (adjust as needed)
+y_current = 0.0   # Current altitude (initially at ground level)
+y_pid = PID(.3, 0, 1, setpoint=y_desired, output_limits=(-1, 1))
+
+
+
 def connect_px4():
 
     global px4_connection
@@ -96,8 +135,7 @@ def process_gps_data(data, gps_data_px4):
 
 
 def main():
-
-   
+    
 
     # Connect to the CARLA simulator
     client = carla.Client('localhost', 2000)
@@ -107,7 +145,7 @@ def main():
     world = client.get_world()
     settings = world.get_settings()
     settings.synchronous_mode = False
-    settings.fixed_delta_seconds = 0.05  # Set the time step for the simulation
+    settings.fixed_delta_seconds = 0.01  # Set the time step for the simulation
     #world.apply_settings(settings)
 
     # Spawn a vehicle named 'lea'
@@ -148,7 +186,7 @@ def main():
     gps_sensor.listen(lambda data: process_gps_data(data, gps_data_px4))
     imu_sensor.listen(lambda data: process_imu_data(data, imu_data_px4))
    
-    init_time=time.time()
+
 
     try:
         
@@ -157,11 +195,8 @@ def main():
         spectator.set_transform(carla.Transform(transform.location + carla.Location(z=2), transform.rotation))
         connect_px4()
         # Main loop
-        ready_px4=False
         while True:
-            init_time+=settings.fixed_delta_seconds
-            if ready_px4:
-                world.tick()  # Tick the simulation
+            world.tick()  # Tick the simulation
             # vehicle.apply_control_d()
             #vehicle.apply_motor_speed(1500,1500,1400,1400)
             # Adjust the spectator's transform if needed
@@ -170,11 +205,11 @@ def main():
             # print(transform)
         
             #vehicle.apply_motor_speed(0,0,0,5000)
-               
+                
             if gps_data_px4 is not None and imu_data_px4 is not None:
-                time.sleep(settings.fixed_delta_seconds)  # Wait for the next tick
+                # time.sleep(settings.fixed_delta_seconds)  # Wait for the next tick
 
-                time_usec           =  int(init_time * 1e6)               # Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude of the number. [us] (type:uint64_t)
+                time_usec           =  int(time.time() * 1e6)               # Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude of the number. [us] (type:uint64_t)
                 fix_type            = 3                         # 0-1: no fix, 2: 2D fix, 3: 3D fix. Some applications will not use the value of this field unless it is at least two, so always correctly fill in the fix. (type:uint8_t)
                 lat                 = gps_data_px4.latitude   # Latitude (WGS84) [degE7] (type:int32_t)
                 lon                 = gps_data_px4.longitude        # Longitude (WGS84) [degE7] (type:int32_t)
@@ -244,7 +279,7 @@ def main():
 
 
 
-                time_usec           = int(init_time * 1e6)                    # Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude of the number. [us] (type:uint64_t)
+                time_usec           = int(time.time() * 1e6)                    # Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude of the number. [us] (type:uint64_t)
                 xacc                = imu_data_px4.accelerometer.x        # X acceleration [m/s/s] (type:float)
                 yacc                = imu_data_px4.accelerometer.y         # Y acceleration [m/s/s] (type:float)
                 zacc                = -imu_data_px4.accelerometer.z        # Z acceleration [m/s/s] (type:float)
@@ -281,39 +316,39 @@ def main():
                         id                  = the_id            ,
                     )
 
-            #     print ( "--> HIL_SENSOR {",
-            #     "time_usec :"       , time_usec,
-            #     ",",
-            #     "xacc :"            , xacc,
-            #     ",",
-            #     "yacc :"            , yacc,
-            #     ",",
-            #     "zacc :"            , zacc,
-            #     ",",
-            #     "xgyro :"           , xgyro,
-            #     ",",
-            #     "ygyro :"           , ygyro,
-            #     ",",
-            #     "zgyro :"           , zgyro,
-            #     ",",
-            #     "xmag :"            , xmag,
-            #     ",",
-            #     "ymag :"            , ymag,
-            #     ",",
-            #     "zmag :"            , zmag,
-            #     ",",
-            #     "abs_pressure :"    , abs_pressure,
-            #     ",",
-            #     "diff_pressure :"   , diff_pressure,
-            #     ",",
-            #     "pressure_alt :"    , pressure_alt,
-            #     ",",
-            #     "temperature :"     , temperature,
-            #     ",",
-            #     "fields_updated :"  , fields_updated,
-            #     ",",
-            #     "id :"              , the_id,
-            # "}")
+                print ( "--> HIL_SENSOR {",
+                "time_usec :"       , time_usec,
+                ",",
+                "xacc :"            , xacc,
+                ",",
+                "yacc :"            , yacc,
+                ",",
+                "zacc :"            , zacc,
+                ",",
+                "xgyro :"           , xgyro,
+                ",",
+                "ygyro :"           , ygyro,
+                ",",
+                "zgyro :"           , zgyro,
+                ",",
+                "xmag :"            , xmag,
+                ",",
+                "ymag :"            , ymag,
+                ",",
+                "zmag :"            , zmag,
+                ",",
+                "abs_pressure :"    , abs_pressure,
+                ",",
+                "diff_pressure :"   , diff_pressure,
+                ",",
+                "pressure_alt :"    , pressure_alt,
+                ",",
+                "temperature :"     , temperature,
+                ",",
+                "fields_updated :"  , fields_updated,
+                ",",
+                "id :"              , the_id,
+            "}")
 
 
                 if px4_connection != None:
@@ -321,13 +356,41 @@ def main():
                     if msg != None: 
                         print(msg.get_type())       
                         if msg.get_type() == 'HIL_ACTUATOR_CONTROLS':
-                            ready_px4=True
                             print( "<==", msg.controls[0:4])
                             #fl3-2 fr1-0 rl2-1 rr4-3
-                            all=sum(msg.controls[0:4])
-                            vehicle.apply_motor_speed(all*2000,all*2000,all*2000,all*2000)
-                            #vehicle.apply_motor_speed(msg.controls[2]*2000,msg.controls[0]*2000,msg.controls[1]*2000,msg.controls[3]*2000)
-                
+                            # vehicle.apply_motor_speed(msg.controls[2]*2000,msg.controls[0]*2000,msg.controls[1]*2000,msg.controls[3]*2000)
+                            x_output = x_pid(transform.location.x+random.uniform(-.02,0.02))
+                            #pitch_pid.setpoint=-x_output*10
+                            y_output = y_pid(transform.location.y+random.uniform(-.02,0.02))
+                            #roll_pid.setpoint=y_output*10
+                            if (transform.location.z>40):
+                                print("arrived")
+                                roll_pid.setpoint=10
+
+                            roll_output = roll_pid(transform.rotation.roll+random.uniform(-.2,0.2))
+                            pitch_output = pitch_pid(transform.rotation.pitch+random.uniform(-.2,0.2))
+                            yaw_output = yaw_pid(transform.rotation.yaw)
+                        
+                            throttle_output = z_pid(transform.location.z+random.uniform(-.02,0.02))
+                        
+                            
+                            
+
+                            speed_set=10
+                            front_left = 3+ speed_set*throttle_output + (roll_output + pitch_output -yaw_output)
+                            front_right =3+  speed_set*throttle_output + (-roll_output + pitch_output + yaw_output )
+                            rear_left =3+ speed_set*throttle_output + (+roll_output - pitch_output+yaw_output)
+                            rear_right =3+ speed_set*throttle_output + (-roll_output - pitch_output -yaw_output)
+                            
+                            # front_left=1
+                            # rear_right=1
+                            # front_right=1
+                            # rear_left=1
+
+
+                            print(">>pidCtl",front_left,front_right,rear_left,rear_right)
+                            vehicle.apply_motor_speed(front_left*100,front_right*100,rear_left*100,rear_right*100)
+                                
                             
     finally:
         if vehicle is not None:

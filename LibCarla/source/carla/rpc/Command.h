@@ -91,6 +91,22 @@ namespace rpc {
       ActorId actor;
       MSGPACK_DEFINE_ARRAY(actor);
     };
+    
+    struct ApplyDroneMotorSpeed : CommandBase<ApplyDroneMotorSpeed> {
+    ApplyDroneMotorSpeed() = default;
+
+    ApplyDroneMotorSpeed(ActorId id, float fl, float fr,float rl,float rr)
+        : actor(id), front_left_value(fl), front_right_value(fr), rear_left_value(rl), rear_right_value(rr) {}
+
+    ActorId actor;
+    float front_left_value;
+    float front_right_value;
+    float rear_left_value;
+    float rear_right_value;
+   
+    MSGPACK_DEFINE_ARRAY(actor, front_left_value,front_right_value,rear_left_value,rear_right_value);
+    };
+
 
 
     struct ApplyVehicleAckermannControl : CommandBase<ApplyVehicleAckermannControl> {
@@ -305,6 +321,7 @@ namespace rpc {
         DestroyActor,
         ApplyVehicleControl,
         ApplyDroneControl,
+        ApplyDroneMotorSpeed,
         ApplyVehicleAckermannControl,
         ApplyWalkerControl,
         ApplyVehiclePhysicsControl,

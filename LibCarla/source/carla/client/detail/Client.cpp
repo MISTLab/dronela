@@ -437,6 +437,10 @@ namespace detail {
     _pimpl->AsyncCall("apply_control_to_drone", drone);
   }
 
+  void Client::ApplyMotorSpeedToDrone(rpc::ActorId drone , float m1,float m2,float m3,float m4) {
+    _pimpl->AsyncCall("apply_motor_speed_to_drone", drone , m1, m2, m3, m4);
+  }
+
   void Client::ApplyAckermannControlToVehicle(rpc::ActorId vehicle, const rpc::VehicleAckermannControl &control) {
     _pimpl->AsyncCall("apply_ackermann_control_to_vehicle", vehicle, control);
   }

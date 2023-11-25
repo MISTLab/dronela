@@ -261,6 +261,11 @@ namespace detail {
         rpc::ActorId drone
         );
 
+    void ApplyMotorSpeedToDrone(
+        rpc::ActorId drone,
+        float m1,float m2,float m3,float m4
+        );
+
     void ApplyAckermannControlToVehicle(
         rpc::ActorId vehicle,
         const rpc::VehicleAckermannControl &control);

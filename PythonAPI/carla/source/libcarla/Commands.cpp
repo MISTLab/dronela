@@ -106,6 +106,16 @@ void export_commands() {
     .def_readwrite("actor_id", &cr::Command::ApplyDroneControl::actor)
   ;
 
+  class_<cr::Command::ApplyDroneMotorSpeed>("ApplyDroneMotorSpeed")
+    .def("__init__", &command_impl::CustomInit<ActorPtr, float, float, float, float >, (arg("actor"), arg("front_left_value"),arg("front_right_value"),arg("rear_left_value"),arg("rear_right_value")))
+    .def_readwrite("actor", &cr::Command::ApplyDroneMotorSpeed::actor)
+    .def_readwrite("front_left_value", &cr::Command::ApplyDroneMotorSpeed::front_left_value)
+    .def_readwrite("front_right_value", &cr::Command::ApplyDroneMotorSpeed::front_right_value)
+    .def_readwrite("rear_left_value", &cr::Command::ApplyDroneMotorSpeed::rear_left_value)
+    .def_readwrite("rear_right_value", &cr::Command::ApplyDroneMotorSpeed::rear_right_value)
+;
+
+
   class_<cr::Command::ApplyVehicleAckermannControl>("ApplyVehicleAckermannControl")
     .def("__init__", &command_impl::CustomInit<ActorPtr, cr::VehicleAckermannControl>, (arg("actor"), arg("control")))
     .def(init<cr::ActorId, cr::VehicleAckermannControl>((arg("actor_id"), arg("control"))))
@@ -231,6 +241,7 @@ void export_commands() {
   implicitly_convertible<cr::Command::DestroyActor, cr::Command>();
   implicitly_convertible<cr::Command::ApplyVehicleControl, cr::Command>();
   implicitly_convertible<cr::Command::ApplyDroneControl, cr::Command>();
+  implicitly_convertible<cr::Command::ApplyDroneMotorSpeed, cr::Command>();
   implicitly_convertible<cr::Command::ApplyVehicleAckermannControl, cr::Command>();
   implicitly_convertible<cr::Command::ApplyWalkerControl, cr::Command>();
   implicitly_convertible<cr::Command::ApplyVehiclePhysicsControl, cr::Command>();
