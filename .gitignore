@@ -6,8 +6,7 @@ TrafficManager/build
 Util/Build
 Install
 Plugins
-
-!Unreal/CarlaUE4/Plugins/Carla/Source/Carla/*
+!Plugins/Carla/Source/*
 
 /ExportedMaps
 /Import/*
