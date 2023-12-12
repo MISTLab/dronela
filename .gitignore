@@ -6,7 +6,10 @@ TrafficManager/build
 Util/Build
 Install
 Plugins
-!Plugins/Carla/Source/*
+!Unreal/CarlaUE4/Plugins
+Unreal/CarlaUE4/Plugins/Streetmap
+Unreal/CarlaUE4/Plugins/HoudiniEngine
+
 
 /ExportedMaps
 /Import/*
@@ -47,3 +50,4 @@ _out*
 _site
 core
 profiler.csv
+
