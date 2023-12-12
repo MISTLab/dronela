@@ -4,20 +4,20 @@ Debug
 DerivedDataCache
 Intermediate
 Saved
+!Plugins/Carla/CarlaDependencies/include/mavlink
+!Plugins/Carla/Source/Carla/*
 Plugins/Carla/Binaries
 Plugins/Carla/Build
 Plugins/Carla/CarlaServer
 Plugins/Carla/CarlaDependencies
-!Plugins/Carla/CarlaDependencies/include/mavlink
-!Plugins/Carla/Source/Carla/*
 Plugins/Carla/Debug
 Plugins/Carla/DerivedDataCache
 Plugins/Carla/Intermediate
 Plugins/Carla/Saved
 
 /Content/*
-
 !/Content/Dronela
+
 Config/CarlaSettings.ini
 Config/DefaultEditor.ini
 Config/CarSimConfig.ini
