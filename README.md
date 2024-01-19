@@ -1,3 +1,13 @@
+DRONELA Simulator
+===============
+For building dronela on linux please follow carla steps however use 
+https://github.com/MISTLab/dronela.git instead of carla's git directory.
+
+Finally after make launch command, when the CarlaUE4 Editor is executed for the first time, in the content browser sub-window navigate to /Content/Carla/Blueprints/Game and open CarlaGameMode.uasset. In the Carla game mode tab, section actor factories add an element and select DroneFactory.
+
+![Screenshot from 2024-01-19 17-23-35](https://github.com/MISTLab/dronela/assets/44288492/ca97d0be-f02e-463f-b251-2b5c6edac59f)
+
+
 CARLA Simulator
 ===============
 
