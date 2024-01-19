@@ -7,6 +7,10 @@ Finally after make launch command, when the CarlaUE4 Editor is executed for the 
 
 ![Screenshot from 2024-01-19 17-23-35](https://github.com/MISTLab/dronela/assets/44288492/ca97d0be-f02e-463f-b251-2b5c6edac59f)
 
+#### Dronela Dependencies
+```sh
+python -m pip install simple-pid
+```
 
 CARLA Simulator
 ===============
@@ -161,7 +165,4 @@ CARLA uses the Autodesk FBX SDK for converting FBX to OBJ in the import process 
 This software contains Autodesk® FBX® code developed by Autodesk, Inc. Copyright 2020 Autodesk, Inc. All rights, reserved. Such code is provided "as is" and Autodesk, Inc. disclaims any and all warranties, whether express or implied, including without limitation the implied warranties of merchantability, fitness for a particular purpose or non-infringement of third party rights. In no event shall Autodesk, Inc. be liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including, but not limited to, procurement of substitute goods or services; loss of use, data, or profits; or business interruption) however caused and on any theory of liability, whether in contract, strict liability, or tort (including negligence or otherwise) arising in any way out of such code."
 
 
-#### Dronela Dependencies
-```sh
-python -m pip install simple-pid
-```
+
