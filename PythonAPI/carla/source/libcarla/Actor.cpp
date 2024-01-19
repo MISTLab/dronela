@@ -123,7 +123,6 @@ void export_actor() {
       .def("add_impulse", &AddActorImpulse, (arg("impulse")))
       .def("add_force", &AddActorForce, (arg("force")))
       .def("add_angular_impulse", &cc::Actor::AddAngularImpulse, (arg("angular_impulse")))
-      .def("add_printer"  ,&cc::Actor::AddPrinter, (arg("printer")))
       .def("add_torque", &cc::Actor::AddTorque, (arg("torque")))
       .def("set_simulate_physics", &cc::Actor::SetSimulatePhysics, (arg("enabled") = true))
       .def("set_enable_gravity", &cc::Actor::SetEnableGravity, (arg("enabled") = true))
@@ -199,8 +198,7 @@ void export_actor() {
       .def(self_ns::str(self_ns::self))
   ;
 
-  class_<cc::Drone, bases<cc::Actor>, boost::noncopyable, boost::shared_ptr<cc::Drone>>("Drone",
-      no_init)
+  class_<cc::Drone, bases<cc::Actor>, boost::noncopyable, boost::shared_ptr<cc::Drone>>("Drone", no_init)
       .def("apply_control_d",&cc::Drone::ApplyControl, (arg("force")))
       .def("apply_motor_speed",&cc::Drone::ApplyMotorSpeed, (arg("front_left_value"),arg("front_right_value"),arg("rear_left_value"),arg("rear_right_value")))
       .def(self_ns::str(self_ns::self))

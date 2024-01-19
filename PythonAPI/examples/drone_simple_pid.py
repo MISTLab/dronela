@@ -16,7 +16,7 @@ import os
 import sys
 import time
 import math
-from pymavlink import mavutil
+#from pymavlink import mavutil
 import random
 try:
     sys.path.append(glob.glob('../carla/dist/carla-*%d.%d-%s.egg' % (
@@ -37,7 +37,7 @@ def pid_controller(desired, current, kp, ki, kd, output_limits):
     return pid(current)
 
 
-roll_desired = 0.0
+roll_desired = -0.1
 roll_current = 0.0
 roll_pid = PID(1.0, 0.01, 0.4, setpoint=roll_desired, output_limits=(-1, 1))
 
@@ -52,7 +52,7 @@ z_current = 0.0   # Current altitude (initially at ground level)
 z_pid = PID(1, 0.01, 0.4, setpoint=z_desired, output_limits=(0, 1))
 
 # Example PID Controller for Yaw
-yaw_desired = 1
+yaw_desired = 0
 yaw_current = 0
 yaw_pid = PID(1.0, 0.01, 0.4, setpoint=yaw_desired, output_limits=(-1, 1))
  
@@ -101,17 +101,17 @@ def main():
             transform = vehicle.get_transform()
             spectator.set_transform(carla.Transform(transform.location+carla.Location(x=0) +carla.Location(y=-0) + carla.Location(z=4), carla.Rotation(pitch=-90)))
             x_output = x_pid(transform.location.x+random.uniform(-.02,0.02))
-            pitch_pid.setpoint=-x_output*10
+            #pitch_pid.setpoint=-x_output*10
             y_output = y_pid(transform.location.y+random.uniform(-.02,0.02))
-            roll_pid.setpoint=y_output*10
+            #roll_pid.setpoint=y_output*10
 
-            roll_output = roll_pid(transform.rotation.roll+random.uniform(-.2,0.2))
-            pitch_output = pitch_pid(transform.rotation.pitch+random.uniform(-.2,0.2))
+            roll_output = roll_pid(transform.rotation.roll+random.uniform(-.002,0.002))
+            pitch_output = pitch_pid(transform.rotation.pitch+random.uniform(-.002,0.002))
             yaw_output = yaw_pid(transform.rotation.yaw)
            
             throttle_output = z_pid(transform.location.z+random.uniform(-.02,0.02))
            
-            print(transform.location.y,y_output)
+            print(transform.location,y_output)
             
 
             speed_set=1
@@ -128,10 +128,10 @@ def main():
 
 
             vehicle.apply_motor_speed(front_left*3000,front_right*3000,rear_left*3000,rear_right*3000)
-                
+            # vehicle.apply_control_d()
                             
     finally:
-        if vehicle is not None:
+        if vehicle is not None: 
           
             vehicle.destroy()
             print('Vehicle destroyed.')

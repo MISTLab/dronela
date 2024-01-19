@@ -870,25 +870,7 @@ ECarlaServerResponse FVehicleActor::ApplyControlToVehicle(
   return ECarlaServerResponse::Success;
 }
 
-ECarlaServerResponse FDroneActor::ApplyControlToDrone()
-{
-  if (IsDormant())
-  {
-    
-  }
-  else
-  {
-    auto Drone = Cast<ADrone>(GetActor());
-    if (Drone == nullptr)
-    {
-      return ECarlaServerResponse::NotADrone;
-    }
-    Drone->ApplyDroneControl();
-    
 
-  }
-  return ECarlaServerResponse::Success;
-}
 
 
 ECarlaServerResponse FDroneActor::ApplyMotorSpeedToDrone(float m1,float m2,float m3,float m4)
@@ -905,8 +887,7 @@ ECarlaServerResponse FDroneActor::ApplyMotorSpeedToDrone(float m1,float m2,float
       return ECarlaServerResponse::NotADrone;
     }
     Drone->ApplyDroneMotorSpeed(m1, m2, m3, m4);
-    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Drone->ApplyDroneMotorSpeed();"));
-
+   
   }
   return ECarlaServerResponse::Success;
 }

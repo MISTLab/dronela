@@ -295,10 +295,6 @@ public:
     return ECarlaServerResponse::ActorTypeMismatch;
   }
 
-  virtual ECarlaServerResponse ApplyControlToDrone()
-  {
-    return ECarlaServerResponse::ActorTypeMismatch;
-  }
 
  virtual ECarlaServerResponse ApplyMotorSpeedToDrone(float m1,float m2,float m3,float m4)
   {
@@ -487,7 +483,6 @@ public:
       TSharedPtr<const FActorInfo> Info,
       carla::rpc::ActorState InState,
       UWorld* World);
-  virtual ECarlaServerResponse ApplyControlToDrone() final;
   virtual ECarlaServerResponse ApplyMotorSpeedToDrone(float m1,float m2,float m3,float m4) final;  
 
 };

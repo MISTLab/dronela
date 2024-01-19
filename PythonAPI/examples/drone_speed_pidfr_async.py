@@ -1,3 +1,13 @@
+#!/usr/bin/env python
+
+# Copyright (c) 2021 Computer Vision Center (CVC) at the Universitat Autonoma de
+# Barcelona (UAB).
+#
+# This work is licensed under the terms of the MIT license.
+# For a copy, see <https://opensource.org/licenses/MIT>.
+
+"""Example script to generate traffic in the simulation"""
+
 
 
 
@@ -13,13 +23,13 @@ from pygame.locals import QUIT,KEYUP, KEYDOWN, K_ESCAPE, K_w, K_a, K_s, K_d, K_S
 import numpy as np
 #from pymavlink import mavutil
 import random
-# try:
-#     sys.path.append(glob.glob('../carla/dist/carla-*%d.%d-%s.egg' % (
-#         sys.version_info.major,
-#         sys.version_info.minor,
-#         'win-amd64' if os.name == 'nt' else 'linux-x86_64'))[0])
-# except IndexError:
-#     pass
+try:
+    sys.path.append(glob.glob('../carla/dist/carla-*%d.%d-%s.egg' % (
+        sys.version_info.major,
+        sys.version_info.minor,
+        'win-amd64' if os.name == 'nt' else 'linux-x86_64'))[0])
+except IndexError:
+    pass
 
 import carla
 
@@ -41,12 +51,13 @@ class Drone_sensors_ctl:
         self.screen=screen
         if (camera_bp!=None):
             if(camera_transform==None):
-                camera_transform=carla.Transform(carla.Location(x=0 ,z=.5))
+                camera_transform=carla.Transform(carla.Location(x=-2 ,z=1))
             self.camera=world.spawn_actor(camera_bp, camera_transform, attach_to=self.drone)
             self.camera.listen(lambda image: self.on_camera_image(image,screen))
+    
+
         else:
             self.camera=None
-
         if (lidar_bp!=None):
             if(lidar_transform==None):
                 lidar_transform= carla.Transform(carla.Location(x=0,y=0, z=-0.20))
@@ -96,6 +107,7 @@ class Drone_sensors_ctl:
 
     def imu_callback(self, imu_data):
         self.angular_rate = imu_data.gyroscope
+        print(imu_data.gyroscope)
 
     def get_angular_velocity(self):
         return self.angular_rate
@@ -217,24 +229,6 @@ class controller:
     def right_speed(cls,world_speed,world_yaw):
         return -world_speed.x*math.sin(world_yaw)+world_speed.y*math.cos(world_yaw)
 
-def world_tick(drone_s_ctl_1, world_snap_shot):
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            running = False
-        elif event.type == KEYDOWN or event.type == KEYUP:
-            drone_s_ctl_1.controller.handle_keys(event.type,event.key)
-            
-    #time.sleep( settings.fixed_delta_seconds)
-    
-    vehicle_transform = drone_s_ctl_1.drone.get_transform()
-    vehicle_velocity= drone_s_ctl_1.drone.get_velocity()
-    vehicle_angular_rate=drone_s_ctl_1.get_angular_velocity()
-    #spectator.set_transform(carla.Transform(vehicle_transform.location+carla.Location(x=0) +carla.Location(y=-0) + carla.Location(z=4), carla.Rotation(pitch=-90)))
-    front_left,front_right,rear_left,rear_right=drone_s_ctl_1.controller.pid_calculate(vehicle_transform,vehicle_velocity,vehicle_angular_rate)
-
-    drone_s_ctl_1.drone.apply_motor_speed(front_left*3000,front_right*3000,rear_left*3000,rear_right*3000)
-    # vehicle.apply_control_d()
-
 
 def main():
     pygame.init()
@@ -248,9 +242,9 @@ def main():
     world = client.get_world()
     settings = world.get_settings()
     settings.synchronous_mode = False
-    settings.fixed_delta_seconds = 0.03  # Set the time step for the simulation
+    settings.fixed_delta_seconds = 0.05  # Set the time step for the simulation
     world.apply_settings(settings)
-   
+
     
     drone_blue_print =world.get_blueprint_library().filter('lea')[0]  
     spawn_point =carla.Transform(carla.Location(x=0, y=10, z=1), carla.Rotation(yaw=0))
@@ -262,26 +256,58 @@ def main():
     camera_bp = world.get_blueprint_library().find('sensor.camera.rgb')
     
 
-    drone_s_ctl_1=Drone_sensors_ctl(world=world,
+    drone_s_ctl_1=Drone_sensors_ctl(world=world
                                     drone_bp=drone_blue_print,spawn_point=spawn_point,
-                                    camera_bp=camera_bp,screen=screen,
+                                    camera_bp=camera_bp,
                                     imu_bp=imu_bp,
                                     controller=controller())
     
-    world.on_tick(lambda world_snap_shot:world_tick(drone_s_ctl_1,world_snap_shot))
-    # drone_s_ctl_2=Drone_sensors_ctl(world=world,
+
+    # drone_s_ctl_2=Drone_sensors_ctl(world=world
     #                                 drone_bp=drone_blue_print,spawn_point=spawn_point2,
-    #                                 camera_bp=camera_bp,screen=screen,
+    #                                 camera_bp=camera_bp,
     #                                 imu_bp=imu_bp,
     #                                 controller=controller())
 
     
     
 
-    try:    
+    try:
+        
         while True:
-          time.sleep(1)
-    except KeyboardInterrupt:
+
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    running = False
+                elif event.type == KEYDOWN or event.type == KEYUP:
+                    drone_s_ctl_1.controller.handle_keys(event.type,event.key)
+                    
+            time.sleep( settings.fixed_delta_seconds)
+           
+            # vehicle_transform = drone_s_ctl_1.drone.get_transform()
+            # vehicle_velocity= drone_s_ctl_1.drone.get_velocity()
+            # vehicle_angular_rate=drone_s_ctl_1.get_angular_velocity()
+            # #spectator.set_transform(carla.Transform(vehicle_transform.location+carla.Location(x=0) +carla.Location(y=-0) + carla.Location(z=4), carla.Rotation(pitch=-90)))
+            # front_left,front_right,rear_left,rear_right=drone_s_ctl_1.controller.pid_calculate(vehicle_transform,vehicle_velocity,vehicle_angular_rate)
+
+            # drone_s_ctl_1.drone.apply_motor_speed(front_left*3000,front_right*3000,rear_left*3000,rear_right*3000)
+            # # vehicle.apply_control_d()
+
+            # # vehicle_transform = drone_s_ctl_2.drone.get_transform()
+            # # vehicle_velocity= drone_s_ctl_2.drone.get_velocity()
+            # # vehicle_angular_rate=drone_s_ctl_2.get_angular_velocity()
+            # # #spectator.set_transform(carla.Transform(vehicle_transform.location+carla.Location(x=0) +carla.Location(y=-0) + carla.Location(z=4), carla.Rotation(pitch=-90)))
+            # # front_left,front_right,rear_left,rear_right=drone_s_ctl_2.controller.pid_calculate(vehicle_transform,vehicle_velocity,vehicle_angular_rate)
+
+
+
+         
+            # # drone_s_ctl_2.drone.apply_motor_speed(front_left*3000,front_right*3000,rear_left*3000,rear_right*3000)
+            # # # vehicle.apply_control_d()
+         
+            clock.tick(1/settings.fixed_delta_seconds)
+            # world.tick()  # Tick the simulation               
+    finally:
         if drone_s_ctl_1 is not None: 
             drone_s_ctl_1.destroy_all()
             

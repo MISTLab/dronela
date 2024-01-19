@@ -22,10 +22,7 @@ public:
     virtual void Tick(float DeltaTime) override;
     
     // Declare a blueprint callable function
-    UFUNCTION(BlueprintCallable, Category = "Drone_Functions")
-    void Stringer();
-    UFUNCTION(Category = "Drone_Functions", BlueprintCallable)
-    void ApplyDroneControl();
+  
 
     UFUNCTION(Category = "Drone_Functions", BlueprintCallable)
     void ApplyDroneMotorSpeed(float m1,float m2,float m3,float m4);

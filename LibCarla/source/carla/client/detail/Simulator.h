@@ -462,9 +462,7 @@ namespace detail {
       _client.ApplyControlToVehicle(vehicle.GetId(), control);
     }
 
-    void ApplyControlToDrone(Drone &drone) {
-      _client.ApplyControlToDrone(drone.GetId());
-    }
+ 
 
     void ApplyMotorSpeedToDrone(Drone &drone, float m1,float m2,float m3,float m4) {
       _client.ApplyMotorSpeedToDrone(drone.GetId(), m1, m2, m3, m4);

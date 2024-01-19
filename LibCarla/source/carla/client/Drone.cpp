@@ -12,9 +12,6 @@ namespace client {
   Drone::Drone(ActorInitializer init)
     : Actor(std::move(init)) {}
 
-  void Drone::ApplyControl() {
-    GetEpisode().Lock()->ApplyControlToDrone(*this);
-    }
   
   void Drone::ApplyMotorSpeed(float m1,float m2,float m3,float m4) {
     GetEpisode().Lock()->ApplyMotorSpeedToDrone(*this, m1, m2, m3, m4 );

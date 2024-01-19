@@ -257,10 +257,7 @@ namespace detail {
         rpc::ActorId vehicle,
         const rpc::VehicleControl &control);
 
-    void ApplyControlToDrone(
-        rpc::ActorId drone
-        );
-
+ 
     void ApplyMotorSpeedToDrone(
         rpc::ActorId drone,
         float m1,float m2,float m3,float m4

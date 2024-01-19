@@ -1447,29 +1447,7 @@ void FCarlaServer::FPimpl::BindActions()
     return R<void>::Success();
   };
 
-  BIND_SYNC(apply_control_to_drone) << [this](
-      cr::ActorId ActorId) -> R<void>
-  {
-    REQUIRE_CARLA_EPISODE();
-    FCarlaActor* CarlaActor = Episode->FindCarlaActor(ActorId);
-    if (!CarlaActor)
-    {
-      return RespondError(
-          "apply_control_to_drone",
-          ECarlaServerResponse::ActorNotFound,
-          " Actor Id: " + FString::FromInt(ActorId));
-    }
-    ECarlaServerResponse Response =
-        CarlaActor->ApplyControlToDrone();
-    if (Response != ECarlaServerResponse::Success)
-    {
-      return RespondError(
-          "apply_control_to_drone",
-          Response,
-          " Actor Id: " + FString::FromInt(ActorId));
-    }
-    return R<void>::Success();
-  };
+ 
 
 
 
@@ -2367,7 +2345,6 @@ void FCarlaServer::FPimpl::BindActions()
       },
       [=](auto, const C::DestroyActor &c) {         MAKE_RESULT(destroy_actor(c.actor)); },
       [=](auto, const C::ApplyVehicleControl &c) {  MAKE_RESULT(apply_control_to_vehicle(c.actor, c.control)); },
-      [=](auto, const C::ApplyDroneControl &c) {  MAKE_RESULT(apply_control_to_drone(c.actor)); },
       [=](auto, const C::ApplyDroneMotorSpeed &c) {  MAKE_RESULT(apply_motor_speed_to_drone(c.actor, c.front_left_value, c.front_right_value, c.rear_left_value, c.rear_right_value)); },
       [=](auto, const C::ApplyVehicleAckermannControl &c) {  MAKE_RESULT(apply_ackermann_control_to_vehicle(c.actor, c.control)); },
       [=](auto, const C::ApplyWalkerControl &c) {   MAKE_RESULT(apply_control_to_walker(c.actor, c.control)); },
@@ -2378,7 +2355,6 @@ void FCarlaServer::FPimpl::BindActions()
       [=](auto, const C::ApplyImpulse &c) {         MAKE_RESULT(add_actor_impulse(c.actor, c.impulse)); },
       [=](auto, const C::ApplyForce &c) {           MAKE_RESULT(add_actor_force(c.actor, c.force)); },
       [=](auto, const C::ApplyAngularImpulse &c) {  MAKE_RESULT(add_actor_angular_impulse(c.actor, c.impulse)); },
-      [=](auto, const C::ApplyPrinter &c) {  MAKE_RESULT(add_actor_printer(c.actor, c.impulse)); },
       [=](auto, const C::ApplyTorque &c) {          MAKE_RESULT(add_actor_torque(c.actor, c.torque)); },
       [=](auto, const C::SetSimulatePhysics &c) {   MAKE_RESULT(set_actor_simulate_physics(c.actor, c.enabled)); },
       [=](auto, const C::SetEnableGravity &c) {   MAKE_RESULT(set_actor_enable_gravity(c.actor, c.enabled)); },

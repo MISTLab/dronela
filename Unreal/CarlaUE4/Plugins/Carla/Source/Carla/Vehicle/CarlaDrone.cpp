@@ -86,12 +86,6 @@ ADrone::ADrone()
 }
 
 
-  
-void ADrone::Stringer()
-{
-    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("hahahahahaha"));
-    UE_LOG(LogTemp, Warning, TEXT("hahahahahaha"));
-}
 
 void ADrone::ApplyDroneMotorSpeed(float m1,float m2,float m3,float m4)
 {
@@ -107,37 +101,6 @@ void ADrone::ApplyDroneMotorSpeed(float m1,float m2,float m3,float m4)
   Motor_Rear_Right->ApplyForceTorque(RootComponent, m4);
   
 }
-
-void ADrone::ApplyDroneControl()
-{
-  //MavConnection->connect();
-
-
-  auto RootComponent = Cast<UPrimitiveComponent>(this->GetRootComponent());
-  FVector ForceToApply = FVector(0.0f, 0.0f, 2800.0f);
-  FVector LocalLocation = FVector(0.5f, 0.5f, 0.0f);
-  Motor_Front_Right->ApplyForceTorque(RootComponent, 1500.0);
-  Motor_Front_Left->ApplyForceTorque(RootComponent, 1500.0);
-  Motor_Rear_Right->ApplyForceTorque(RootComponent, 1500.0);
-  Motor_Rear_Left->ApplyForceTorque(RootComponent, 1500.0); 
-  
-  /* RootComponent->AddForceAtLocationLocal(ForceToApply,LocalLocation, "None");
-   LocalLocation = FVector(0.5f, -0.5f, 0.0f);
-  RootComponent->AddForceAtLocationLocal(ForceToApply,LocalLocation, "None");
-   LocalLocation = FVector(-0.5f, 0.5f, 0.0f);
-  RootComponent->AddForceAtLocationLocal(ForceToApply,LocalLocation, "None");
-   LocalLocation = FVector(-0.5f, -0.5f, 0.0f);
-  RootComponent->AddForceAtLocationLocal(ForceToApply,LocalLocation, "None");
- 
-  
-  FVector ForceToApplyF = FVector(100000.0f, -100000.0f, 0.0f);
-  FVector ForceToApplyC = FVector(-100000.0f, 100000.0f, 0.0f);
-  FVector LocalLocationF = FVector(0.55f, 0.55f, 0.0f);
-  FVector LocalLocationC = FVector(0.45f, 0.45f, 0.0f);
-  RootComponent->AddForceAtLocationLocal(ForceToApplyF,LocalLocationF, "None");
-  RootComponent->AddForceAtLocationLocal(ForceToApplyC,LocalLocationC, "None");
- */
-  }
 
 void ADrone::Tick(float DeltaTime)
 {

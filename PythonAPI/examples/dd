@@ -13,13 +13,13 @@ from pygame.locals import QUIT,KEYUP, KEYDOWN, K_ESCAPE, K_w, K_a, K_s, K_d, K_S
 import numpy as np
 #from pymavlink import mavutil
 import random
-# try:
-#     sys.path.append(glob.glob('../carla/dist/carla-*%d.%d-%s.egg' % (
-#         sys.version_info.major,
-#         sys.version_info.minor,
-#         'win-amd64' if os.name == 'nt' else 'linux-x86_64'))[0])
-# except IndexError:
-#     pass
+try:
+    sys.path.append(glob.glob('../carla/dist/carla-*%d.%d-%s.egg' % (
+        sys.version_info.major,
+        sys.version_info.minor,
+        'win-amd64' if os.name == 'nt' else 'linux-x86_64'))[0])
+except IndexError:
+    pass
 
 import carla
 
@@ -37,55 +37,11 @@ class Drone_sensors_ctl:
                  lidar_bp=None, lidar_transform=None,
                  controller=None
                  ):
-        self.drone= world.spawn_actor(drone_bp, spawn_point)
-        self.screen=screen
-        if (camera_bp!=None):
-            if(camera_transform==None):
-                camera_transform=carla.Transform(carla.Location(x=0 ,z=.5))
-            self.camera=world.spawn_actor(camera_bp, camera_transform, attach_to=self.drone)
-            self.camera.listen(lambda image: self.on_camera_image(image,screen))
-        else:
-            self.camera=None
-
-        if (lidar_bp!=None):
-            if(lidar_transform==None):
-                lidar_transform= carla.Transform(carla.Location(x=0,y=0, z=-0.20))
-            self.lidar=world.spawn_actor(lidar_bp, lidar_transform, attach_to=self.drone)
-        else:
-            self.lidar=None
-        if (imu_bp!=None):
-            if(imu_transform==None):
-                imu_transform= carla.Transform(carla.Location(x=0,y=0, z=0))
-            self.imu=world.spawn_actor(imu_bp, imu_transform, attach_to=self.drone)
-            self.angular_rate = carla.Vector3D(x=0,y=0,z=0)
-            self.imu.listen(lambda imu_data: self.imu_callback(imu_data))
-        else:
-            self.imu=None
-            self.angular_rate=None
-        self.controller=controller
+        #some code
 
     def on_camera_image(self,image,screen):
-    # Get the raw image data
-        image_data = image.raw_data
-
-        # Convert the image data to a NumPy array
-        image_array = np.frombuffer(image_data, dtype=np.uint8)
-
-        # Reshape the array to match the image dimensions and channels
-        image_array = image_array.reshape((image.height, image.width, 4))
-
-        # Extract RGB channels and discard the alpha channel
-        rgb_image = image_array[:, :, :3]
-
-        # Correct color channels order
-        rgb_image = np.flip(rgb_image, axis=2)
-
-        # Rotate the image 90 degrees counter-clockwise
-        rgb_image = np.rot90(rgb_image)
-
-        # Resize the image to match the Pygame window dimensions
-        pygame_surface = pygame.surfarray.make_surface(rgb_image)
-        pygame_surface = pygame.transform.scale(pygame_surface, (2000, 1500))
+    # Get the raw image data processed
+        
         if screen!=None:
             # Blit the Pygame surface onto the entire screen
             screen.blit(pygame_surface, (0, 0))
@@ -132,39 +88,16 @@ class controller:
         self.vleft_pid = PID(10, 0.01, 10, setpoint=0, output_limits=(-35, 35))
         self.vz_pid = PID(1, 0.4, 0, setpoint=0, output_limits=(0, 1))
 
+        #some code
+        return front_left,front_right,rear_left,rear_right
+
     def handle_ros(self, vforward_desired=0, vleft_desired=0,vz_desired=0,yaw_rate_desired=0):
         self.vforward_pid.setpoint=vforward_desired
         self.vleft_desired.setpoint=vleft_desired
         self.vz_desired.setpoint=vz_desired
         self.yaw_rate_desired.setpoint=yaw_rate_desired
         
-    def pid_calculate(self,vehicle_transform,vehicle_velocity,vehicle_angular_rate):
-        vforward_output =self.vforward_pid(self.forward_speed(vehicle_velocity,math.radians(vehicle_transform.rotation.yaw)))
-        self.pitch_pid.setpoint=-vforward_output
-        pitch_output =self.pitch_pid(vehicle_transform.rotation.pitch)#1/(100*math.sin(math.radians(abs(vehicle_transform.rotation.pitch)))+0.1)*
-        
-        vleft_output =self.vleft_pid(self.right_speed(vehicle_velocity,math.radians(vehicle_transform.rotation.yaw)))
-        self.roll_pid.setpoint=vleft_output
-        roll_output =  self.roll_pid(vehicle_transform.rotation.roll)
-       
-        yaw_rate_output = self.yaw_rate_pid(vehicle_angular_rate.z)
-        throttle_output =self.vz_pid(vehicle_velocity.z)
-        
-        #print(vehicle_velocity)
-        #print(vehicle_transform)
-        #print(roll_output)
-        #print("forward_speed",forward_speed(vehicle_velocity,math.radians(vehicle_transform.rotation.yaw)))
-        #print("right_speed",right_speed(vehicle_velocity,math.radians(vehicle_transform.rotation.yaw)))
-        #print("yawRate",vehicle_angular_rate.yaw_rate)
-        speed_set=1
-        front_left =  speed_set*throttle_output  + +roll_output + +pitch_output - yaw_rate_output
-        front_right = speed_set*throttle_output  + -roll_output + +pitch_output + yaw_rate_output 
-        rear_left = speed_set*throttle_output    + +roll_output + -pitch_output + yaw_rate_output
-        rear_right = speed_set*throttle_output   + -roll_output + -pitch_output -yaw_rate_output
-        
-        return front_left,front_right,rear_left,rear_right
 
-    
     def handle_keys(self,type,key,maxspeed=12,maxyaw=2):
         if key==K_w:
             if type==KEYDOWN:

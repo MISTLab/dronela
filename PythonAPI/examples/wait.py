@@ -1,9 +1,4 @@
-#!/usr/bin/env python
 
-import rospy
-from geometry_msgs.msg import Point
-from std_msgs.msg import String
-from sensor_msgs.msg import Imu
 
 
 import glob
@@ -18,11 +13,11 @@ from pygame.locals import QUIT,KEYUP, KEYDOWN, K_ESCAPE, K_w, K_a, K_s, K_d, K_S
 import numpy as np
 #from pymavlink import mavutil
 import random
-
-
-
 try:
-    sys.path.append('/home/vivek/Software/dronela/PythonAPI/carla/dist/carla-0.9.14-py3.8-linux-x86_64.egg')
+    sys.path.append(glob.glob('../carla/dist/carla-*%d.%d-%s.egg' % (
+        sys.version_info.major,
+        sys.version_info.minor,
+        'win-amd64' if os.name == 'nt' else 'linux-x86_64'))[0])
 except IndexError:
     pass
 
@@ -38,13 +33,12 @@ class Drone_sensors_ctl:
     def __init__(self,world, 
                  drone_bp, spawn_point,
                  camera_bp=None,camera_transform=None, screen=None,
-                 imu_bp=None, imu_transform=None,ros_publisher_imu=None,
+                 imu_bp=None, imu_transform=None,
                  lidar_bp=None, lidar_transform=None,
                  controller=None
                  ):
         self.drone= world.spawn_actor(drone_bp, spawn_point)
         self.screen=screen
-        self.ros_publisher_imu=ros_publisher_imu
         if (camera_bp!=None):
             if(camera_transform==None):
                 camera_transform=carla.Transform(carla.Location(x=-2 ,z=1))
@@ -103,12 +97,6 @@ class Drone_sensors_ctl:
 
     def imu_callback(self, imu_data):
         self.angular_rate = imu_data.gyroscope
-        if self.ros_publisher_imu!=None:
-            imu_msg_ros = Imu()
-            imu_msg_ros.header.stamp= rospy.Time.from_sec(imu_data.timestamp)
-            imu_msg_ros.linear_acceleration = imu_data.accelerometer
-            imu_msg_ros.angular_velocity = imu_data.gyroscope
-            self.ros_publisher_imu.publish(imu_msg_ros)
 
     def get_angular_velocity(self):
         return self.angular_rate
@@ -249,12 +237,7 @@ def world_tick(drone_s_ctl_1, world_snap_shot):
     # vehicle.apply_control_d()
 
 
-
 def main():
-    # Initialize the ROS node
-    rospy.init_node('your_node_name', anonymous=True)
-    ros_publisher_imu = rospy.Publisher('imu_data', Imu, queue_size=10)
-    
     pygame.init()
     screen = pygame.display.set_mode((2000, 1500), pygame.HWSURFACE | pygame.DOUBLEBUF)
     clock = pygame.time.Clock()
@@ -278,13 +261,12 @@ def main():
     imu_transform = carla.Transform(carla.Location(x=0, y=0, z=0))  # Adjust these values as needed
     imu_bp = world.get_blueprint_library().find('sensor.other.imu')
     camera_bp = world.get_blueprint_library().find('sensor.camera.rgb')
-    lidar_bp = world.get_blueprint_library().find('sensor.lidar.ray_cast')
+    
 
     drone_s_ctl_1=Drone_sensors_ctl(world=world,
                                     drone_bp=drone_blue_print,spawn_point=spawn_point,
                                     camera_bp=camera_bp,screen=screen,
-                                    imu_bp=imu_bp, ros_publisher_imu=ros_publisher_imu,
-                                    lidar_bp=lidar_bp, ros_publisher_lidar=ros_publisher_lidar
+                                    imu_bp=imu_bp,
                                     controller=controller())
     
     world.on_tick(lambda world_snap_shot:world_tick(drone_s_ctl_1,world_snap_shot))
@@ -294,17 +276,23 @@ def main():
     #                                 imu_bp=imu_bp,
     #                                 controller=controller())
 
+    
+    
 
-
-    # Rate at which to publish messages (in Hz)
-    rate = rospy.Rate(10)  # 10 Hz
-
-    while not rospy.is_shutdown():
-      
-        rate.sleep()
+    try:    
+        while True:
+          time.sleep(1)
+    except KeyboardInterrupt:
+        if drone_s_ctl_1 is not None: 
+            drone_s_ctl_1.destroy_all()
+            
+            print('Vehicle destroyed.')
+        # if drone_s_ctl_2 is not None: 
+        #     drone_s_ctl_2.destroy_all()
+        # If something goes wrong, try to disable synchronous mode
+        settings.synchronous_mode = False
+        world.apply_settings(settings)
+        print('Synchronous mode disabled.')
 
 if __name__ == '__main__':
-    try:
-        main()
-    except rospy.ROSInterruptException:
-        pass
+    main()
