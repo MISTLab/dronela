@@ -11,13 +11,16 @@
 #include "Carla/Actor/PedestrianParameters.h"
 #include "Carla/Actor/PropParameters.h"
 #include "Carla/Actor/VehicleParameters.h"
+#include "Carla/Actor/DroneParameters.h"
 #include "Carla/Sensor/GnssSensor.h"
 #include "Carla/Sensor/Radar.h"
 #include "Carla/Sensor/InertialMeasurementUnit.h"
-
 #include "Kismet/BlueprintFunctionLibrary.h"
 
 #include "ActorBlueprintFunctionLibrary.generated.h"
+
+
+
 
 class ASceneCaptureSensor;
 class AShaderBasedSensor;
@@ -71,6 +74,8 @@ public:
       bool &Success,
       FActorDefinition &Definition);
 
+
+
   static FActorDefinition MakeNormalsCameraDefinition();
 
   UFUNCTION(Category = "Carla Actor", BlueprintCallable)
@@ -115,9 +120,16 @@ public:
       FActorDefinition &Definition);
 
   UFUNCTION(Category = "Carla Actor", BlueprintCallable)
+  static void MakeDroneDefinition(
+      const FDroneParameters &Parameters,
+      bool &Success,
+      FActorDefinition &Definition);
+
+  UFUNCTION(Category = "Carla Actor", BlueprintCallable)
   static void MakeVehicleDefinitions(
       const TArray<FVehicleParameters> &ParameterArray,
       TArray<FActorDefinition> &Definitions);
+
 
   UFUNCTION(Category = "Carla Actor", BlueprintCallable)
   static void MakePedestrianDefinition(

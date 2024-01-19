@@ -16,8 +16,9 @@ public class Carla : ModuleRules
 
   public Carla(ReadOnlyTargetRules Target) : base(Target)
   {
-    PrivatePCHHeaderFile = "Carla.h";
 
+    // PublicIncludePaths.Add(Path.Combine(ModuleDirectory, "../../CarlaDependencies/include/mavlink/include"));
+    PrivatePCHHeaderFile = "Carla.h";
     if (IsWindows(Target))
     {
       bEnableExceptions = true;
@@ -120,8 +121,10 @@ public class Carla : ModuleRules
         // ... add any modules that your module loads dynamically here ...
       }
       );
-
+   
     AddCarlaServerDependency(Target);
+   
+    
   }
 
   private bool UseDebugLibs(ReadOnlyTargetRules Target)

@@ -404,6 +404,10 @@ namespace detail {
     _pimpl->AsyncCall("add_actor_angular_impulse", actor, vector);
   }
 
+  void Client::AddActorPrinter(rpc::ActorId actor, const geom::Vector3D &vector) {
+    _pimpl->AsyncCall("add_actor_printer", actor, vector);
+  }
+
   void Client::AddActorTorque(rpc::ActorId actor, const geom::Vector3D &vector) {
     _pimpl->AsyncCall("add_actor_torque", actor, vector);
   }
@@ -420,12 +424,19 @@ namespace detail {
     _pimpl->AsyncCall("set_actor_autopilot", vehicle, enabled);
   }
 
+
   void Client::ShowVehicleDebugTelemetry(rpc::ActorId vehicle, const bool enabled) {
     _pimpl->AsyncCall("show_vehicle_debug_telemetry", vehicle, enabled);
   }
 
   void Client::ApplyControlToVehicle(rpc::ActorId vehicle, const rpc::VehicleControl &control) {
     _pimpl->AsyncCall("apply_control_to_vehicle", vehicle, control);
+  }
+
+
+
+  void Client::ApplyMotorSpeedToDrone(rpc::ActorId drone , float m1,float m2,float m3,float m4) {
+    _pimpl->AsyncCall("apply_motor_speed_to_drone", drone , m1, m2, m3, m4);
   }
 
   void Client::ApplyAckermannControlToVehicle(rpc::ActorId vehicle, const rpc::VehicleAckermannControl &control) {

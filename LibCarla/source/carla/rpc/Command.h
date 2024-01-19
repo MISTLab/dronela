@@ -84,6 +84,25 @@ namespace rpc {
       MSGPACK_DEFINE_ARRAY(actor, control);
     };
 
+ 
+    
+    struct ApplyDroneMotorSpeed : CommandBase<ApplyDroneMotorSpeed> {
+    ApplyDroneMotorSpeed() = default;
+
+    ApplyDroneMotorSpeed(ActorId id, float fl, float fr,float rl,float rr)
+        : actor(id), front_left_value(fl), front_right_value(fr), rear_left_value(rl), rear_right_value(rr) {}
+
+    ActorId actor;
+    float front_left_value;
+    float front_right_value;
+    float rear_left_value;
+    float rear_right_value;
+   
+    MSGPACK_DEFINE_ARRAY(actor, front_left_value,front_right_value,rear_left_value,rear_right_value);
+    };
+
+
+
     struct ApplyVehicleAckermannControl : CommandBase<ApplyVehicleAckermannControl> {
       ApplyVehicleAckermannControl() = default;
       ApplyVehicleAckermannControl(ActorId id, const VehicleAckermannControl &value)
@@ -192,7 +211,8 @@ namespace rpc {
       geom::Vector3D impulse;
       MSGPACK_DEFINE_ARRAY(actor, impulse);
     };
-
+    
+  
     struct ApplyTorque : CommandBase<ApplyTorque> {
       ApplyTorque() = default;
       ApplyTorque(ActorId id, const geom::Vector3D &value)
@@ -285,6 +305,7 @@ namespace rpc {
         SpawnActor,
         DestroyActor,
         ApplyVehicleControl,
+        ApplyDroneMotorSpeed,
         ApplyVehicleAckermannControl,
         ApplyWalkerControl,
         ApplyVehiclePhysicsControl,

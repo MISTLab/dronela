@@ -9,6 +9,7 @@
 #include "Carla/Actor/ActorInfo.h"
 #include "Carla/Actor/ActorData.h"
 #include "Carla/Vehicle/CarlaWheeledVehicle.h"
+#include "Carla/Vehicle/CarlaDrone.h"
 #include "Carla/Walker/WalkerController.h"
 #include "Carla/Traffic/TrafficLightState.h"
 
@@ -29,7 +30,9 @@ public:
   enum class ActorType : uint8
   {
     Other,
+    Drone,
     Vehicle,
+    Actor,
     Walker,
     TrafficLight,
     TrafficSign,
@@ -51,6 +54,7 @@ public:
   virtual ~FCarlaActor() {};
 
 
+  
   bool IsInValid() const
   {
     return (carla::rpc::ActorState::Invalid == State);
@@ -61,6 +65,7 @@ public:
     return (carla::rpc::ActorState::PendingKill != State &&
             carla::rpc::ActorState::Invalid != State);
   }
+  
 
   bool IsActive() const
   {
@@ -220,6 +225,7 @@ public:
   ECarlaServerResponse AddActorForceAtLocation(const FVector& Force, const FVector& Location);
 
   ECarlaServerResponse AddActorAngularImpulse(const FVector& AngularInpulse);
+  ECarlaServerResponse AddActorPrinter(const FVector& AngularInpulse); 
 
   ECarlaServerResponse AddActorTorque(const FVector& Torque);
 
@@ -289,7 +295,14 @@ public:
     return ECarlaServerResponse::ActorTypeMismatch;
   }
 
+
+ virtual ECarlaServerResponse ApplyMotorSpeedToDrone(float m1,float m2,float m3,float m4)
+  {
+    return ECarlaServerResponse::ActorTypeMismatch;
+  }
+
   virtual ECarlaServerResponse ApplyAckermannControlToVehicle(
+    
       const FVehicleAckermannControl&, const EVehicleInputPriority&)
   {
     return ECarlaServerResponse::ActorTypeMismatch;
@@ -461,6 +474,19 @@ protected:
 
 };
 
+class FDroneActor : public FCarlaActor
+{
+public:
+  FDroneActor(
+      IdType ActorId,
+      AActor* Actor,
+      TSharedPtr<const FActorInfo> Info,
+      carla::rpc::ActorState InState,
+      UWorld* World);
+  virtual ECarlaServerResponse ApplyMotorSpeedToDrone(float m1,float m2,float m3,float m4) final;  
+
+};
+
 class FVehicleActor : public FCarlaActor
 {
 public:
@@ -538,6 +564,7 @@ public:
       UWorld* World);
 
 };
+
 
 class FTrafficSignActor : public FCarlaActor
 {

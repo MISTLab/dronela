@@ -76,6 +76,10 @@ namespace client {
     GetEpisode().Lock()->AddActorAngularImpulse(*this, vector);
   }
 
+
+
+
+
   void Actor::AddTorque(const geom::Vector3D &torque) {
     GetEpisode().Lock()->AddActorTorque(*this, torque);
   }

@@ -1117,6 +1117,31 @@ void FCarlaServer::FPimpl::BindActions()
     return R<void>::Success();
   };
 
+  BIND_SYNC(add_actor_printer) << [this](
+      cr::ActorId ActorId,
+      cr::Vector3D vector) -> R<void>
+  {
+    REQUIRE_CARLA_EPISODE();
+    FCarlaActor* CarlaActor = Episode->FindCarlaActor(ActorId);
+    if (!CarlaActor)
+    {
+      return RespondError(
+          "add_actor_printer",
+          ECarlaServerResponse::ActorNotFound,
+          " Actor Id: " + FString::FromInt(ActorId));
+    }
+    ECarlaServerResponse Response =
+        CarlaActor->AddActorPrinter(vector.ToFVector());
+    if (Response != ECarlaServerResponse::Success)
+    {
+      return RespondError(
+          "add_actor_printer",
+          Response,
+          " Actor Id: " + FString::FromInt(ActorId));
+    }
+    return R<void>::Success();
+  };
+
   BIND_SYNC(add_actor_torque) << [this](
       cr::ActorId ActorId,
       cr::Vector3D vector) -> R<void>
@@ -1422,6 +1447,36 @@ void FCarlaServer::FPimpl::BindActions()
     return R<void>::Success();
   };
 
+ 
+
+
+
+  BIND_SYNC(apply_motor_speed_to_drone) << [this](
+      cr::ActorId ActorId, float m1,float m2,float m3,float m4) -> R<void>
+
+  {
+    REQUIRE_CARLA_EPISODE();
+    FCarlaActor* CarlaActor = Episode->FindCarlaActor(ActorId);
+    if (!CarlaActor)
+    {
+      return RespondError(
+          "apply_motor_speed_to_drone",
+          ECarlaServerResponse::ActorNotFound,
+          " Actor Id: " + FString::FromInt(ActorId));
+    }
+    ECarlaServerResponse Response =
+        CarlaActor->ApplyMotorSpeedToDrone(m1, m2, m3, m4);
+    if (Response != ECarlaServerResponse::Success)
+    {
+      return RespondError(
+          "apply_motor_speed_to_drone",
+          Response,
+          " Actor Id: " + FString::FromInt(ActorId));
+    }
+    return R<void>::Success();
+  };
+
+
   BIND_SYNC(apply_ackermann_control_to_vehicle) << [this](
       cr::ActorId ActorId,
       cr::VehicleAckermannControl Control) -> R<void>
@@ -1636,6 +1691,7 @@ void FCarlaServer::FPimpl::BindActions()
 
     return R<void>::Success();
   };
+
 
   BIND_SYNC(set_actor_autopilot) << [this](
       cr::ActorId ActorId,
@@ -2289,6 +2345,7 @@ void FCarlaServer::FPimpl::BindActions()
       },
       [=](auto, const C::DestroyActor &c) {         MAKE_RESULT(destroy_actor(c.actor)); },
       [=](auto, const C::ApplyVehicleControl &c) {  MAKE_RESULT(apply_control_to_vehicle(c.actor, c.control)); },
+      [=](auto, const C::ApplyDroneMotorSpeed &c) {  MAKE_RESULT(apply_motor_speed_to_drone(c.actor, c.front_left_value, c.front_right_value, c.rear_left_value, c.rear_right_value)); },
       [=](auto, const C::ApplyVehicleAckermannControl &c) {  MAKE_RESULT(apply_ackermann_control_to_vehicle(c.actor, c.control)); },
       [=](auto, const C::ApplyWalkerControl &c) {   MAKE_RESULT(apply_control_to_walker(c.actor, c.control)); },
       [=](auto, const C::ApplyVehiclePhysicsControl &c) {  MAKE_RESULT(apply_physics_control(c.actor, c.physics_control)); },

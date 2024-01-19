@@ -93,6 +93,8 @@ namespace client {
     /// Add angular impulse to the actor.
     void AddAngularImpulse(const geom::Vector3D &vector);
 
+
+  
     /// Add a torque to the actor.
     void AddTorque(const geom::Vector3D &vector);
 

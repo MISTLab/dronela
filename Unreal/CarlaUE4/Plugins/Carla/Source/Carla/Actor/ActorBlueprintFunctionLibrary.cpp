@@ -646,6 +646,8 @@ void UActorBlueprintFunctionLibrary::MakeCameraDefinition(
   Success = CheckActorDefinition(Definition);
 }
 
+
+
 FActorDefinition UActorBlueprintFunctionLibrary::MakeNormalsCameraDefinition()
 {
   FActorDefinition Definition;
@@ -1075,6 +1077,23 @@ void UActorBlueprintFunctionLibrary::MakeGnssDefinition(
 
   Success = CheckActorDefinition(Definition);
 }
+
+
+void UActorBlueprintFunctionLibrary::MakeDroneDefinition(
+    const FDroneParameters &Parameters,
+    bool &Success,
+    FActorDefinition &Definition)
+{
+  FillIdAndTags(Definition, TEXT("drone"), Parameters.Make, Parameters.Model);
+  AddRecommendedValuesForActorRoleName(Definition,
+      {TEXT("autopilot"), TEXT("scenario"), TEXT("ego_vehicle")});
+  Definition.Class = Parameters.Class;
+  
+  Success = CheckActorDefinition(Definition);
+}
+
+
+
 
 void UActorBlueprintFunctionLibrary::MakeVehicleDefinition(
     const FVehicleParameters &Parameters,

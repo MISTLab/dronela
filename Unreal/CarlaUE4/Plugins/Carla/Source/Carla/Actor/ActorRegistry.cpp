@@ -14,6 +14,7 @@
 #include "Carla/Traffic/TrafficLightBase.h"
 #include "Carla/Util/BoundingBoxCalculator.h"
 #include "Carla/Sensor/Sensor.h"
+#include "Carla/Vehicle/CarlaDrone.h"
 
 #include <compiler/disable-ue4-macros.h>
 #include "carla/streaming/Token.h"
@@ -35,6 +36,10 @@ static FCarlaActor::ActorType FActorRegistry_GetActorType(const AActor *Actor)
   if (nullptr != Cast<ACarlaWheeledVehicle>(Actor))
   {
     return FCarlaActor::ActorType::Vehicle;
+  }
+  else if (nullptr != Cast<ADrone>(Actor))
+  {
+    return FCarlaActor::ActorType::Drone;
   }
   else if (nullptr != Cast<ACharacter>(Actor))
   {
@@ -182,6 +187,29 @@ TSharedPtr<FCarlaActor> FActorRegistry::MakeCarlaActor(
         Id, &Actor,
         std::move(Info), Type,
         InState, Actor.GetWorld());
+        UE_LOG(LogTemp, Warning, TEXT("here is tupe-------------"));
+        FString TypeString;
+        switch (Type)
+        {
+            case FCarlaActor::ActorType::Vehicle:
+                TypeString = TEXT("vehicle");
+                break;
+            case FCarlaActor::ActorType::Actor:
+                TypeString = TEXT("actor");
+                break;
+            case FCarlaActor::ActorType::Drone:
+                TypeString = TEXT("drone");
+                break;
+            // Add more cases for other actor types as needed
+            default:
+                TypeString = TEXT("Unknown");
+                break;
+        }
+
+        FString LogMessage = FString::Printf(TEXT("Type: %s"), *TypeString);
+
+        // Use *LogMessage to pass the FString as the log message
+        UE_LOG(LogTemp, Warning, TEXT("%s"), *LogMessage);
   return CarlaActor;
 }
 

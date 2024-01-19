@@ -1,0 +1,8 @@
+--2023-11-01 10:34:38--  http://carla-assets.s3.amazonaws.com/20221201_5ec9328.tar.gz
+Resolving carla-assets.s3.amazonaws.com (carla-assets.s3.amazonaws.com)... 52.95.156.99, 52.95.156.83
+Connecting to carla-assets.s3.amazonaws.com (carla-assets.s3.amazonaws.com)|52.95.156.99|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 16258727379 (15G) [application/x-tar]
+Saving to: ‘Content.tar.gz’
+
+Content.tar.gz             70%[=======================>           ]  10.74G  14.2MB/s    eta 6m 23s Content.tar.gz             70%[=======================>           ]  10.74G  14.1MB/s    eta 6m 23s Content.tar.gz             70%[=======================>           ]  10.74G  13.6MB/s    eta 6m 23s Content.tar.gz             70%[=======================>           ]  10.74G  13.8MB/s    eta 6m 23s Content.tar.gz             70%[=======================>           ]  10.75G  13.6MB/s    eta 6m 21s Content.tar.gz             70%[=======================>           ]  10.75G  13.5MB/s    eta 6m 21s Content.tar.gz             71%[=======================>           ]  10.75G  13.6MB/s    eta 6m 21s Content.tar.gz             71%[=======================>           ]  10.75G  13.3MB/s    eta 6m 21s Content.tar.gz             71%[=======================>           ]  10.76G  13.4MB/s    eta 6m 21s Content.tar.gz             71%[=======================>           ]  10.76G  13.3MB/s    eta 6m 20s Content.tar.gz             71%[=======================>           ]  10.76G  12.7MB/s    eta 6m 20s Content.tar.gz             71%[=======================>           ]  10.76G  12.5MB/s    eta 6m 20s Content.tar.gz             71%[=======================>           ]  10.77G  12.3MB/s    eta 6m 20s 

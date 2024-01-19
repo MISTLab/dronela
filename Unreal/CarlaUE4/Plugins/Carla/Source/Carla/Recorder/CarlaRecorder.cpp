@@ -106,6 +106,10 @@ void ACarlaRecorder::Ticking(float DeltaSeconds)
           AddActorPosition(View);
           break;
 
+        case FCarlaActor::ActorType::Drone:
+          AddActorPosition(View);
+          break;
+
         // save the transform of all vehicles
         case FCarlaActor::ActorType::Vehicle:
           AddActorPosition(View);

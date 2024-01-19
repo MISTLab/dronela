@@ -38,6 +38,8 @@
 #include "carla/rpc/VehicleFailureState.h"
 #include "CarlaWheeledVehicle.generated.h"
 
+
+
 class UBoxComponent;
 
 UENUM()
